@@ -2,7 +2,8 @@ angular.module 'application',['ngRoute','restangular']
 	.config ($routeProvider)->
 		$routeProvider
 		.when "/", {
-			templateUrl : "./assets/templates/landing.html"
+			templateUrl : "./assets/templates/landing.html",
+			controller  : "displayController"
 		}
 		.when "/editor", {
 			templateUrl : "./assets/templates/editor.html"
@@ -30,6 +31,8 @@ angular.module 'application',['ngRoute','restangular']
 
 	.controller 'navController',($scope,$rootScope,$window,tokenFactory)->
 		$scope.authenticated = $window.localStorage.getItem 'token'
+		console.log "URL : "+$window.localStorage.getItem 'url'
+		console.log "TOKEN : "+$window.localStorage.getItem 'token'
 
 		$scope.logout = ()->
 			tokenFactory.clearProfile()
@@ -37,3 +40,11 @@ angular.module 'application',['ngRoute','restangular']
 
 		$rootScope.$on "tokenEvent",()->
 			$scope.authenticated = $window.localStorage.getItem 'token'
+
+
+	.controller 'displayController',($scope,$window,$rootScope)->
+		$scope.authenticated = $window.localStorage.getItem 'token'
+
+		$rootScope.$on "tokenEvent",()->
+			$scope.authenticated = $window.localStorage.getItem 'token'
+

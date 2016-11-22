@@ -7,6 +7,7 @@
 		<div class="column column-50 column-offset-25">
 			<ul class="inline right">
 				<li><a href="#github">Github</a></li>
+				<li><a href="#github" ng-if="authenticated == 'false'">Documentation</a></li>
 				<li><button class="button-primary button-outline" ng-if="authenticated != 'false'" ng-click="logout()">Logout</button></li>
 			</ul>
 		</div>
