@@ -66,13 +66,10 @@ angular.module 'application',['ngRoute','restangular']
 
 
 			getPostContentFromBlob : (blob)->
-				blob
-					.split "---"
-					.slice 2
-					.join "---"
+				blob.split("---").slice(2).join("---")
 
 			generateBlob : (blob,blogContent)->
-				return "---".concat(blob.split("---")[1]).concat("---\n\n").concat(blogContent)
+				return "---".concat(blob.split("---")[1]).concat("---\n").concat(blogContent)
 		}
 
 	.controller 'tokenController',($scope,tokenFactory)->
