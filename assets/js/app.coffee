@@ -5,6 +5,9 @@ angular.module 'application',['ngRoute','restangular']
 			templateUrl : "./assets/templates/landing.html",
 			controller  : "displayController"
 		}
+		.when "/new", {
+			templateUrl : "./assets/templates/new.html"
+		}
 		.when "/editor", {
 			templateUrl : "./assets/templates/editor.html"
 		}

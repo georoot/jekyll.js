@@ -3,6 +3,8 @@ angular.module('application', ['ngRoute', 'restangular']).config(function($route
   $routeProvider.when("/", {
     templateUrl: "./assets/templates/landing.html",
     controller: "displayController"
+  }).when("/new", {
+    templateUrl: "./assets/templates/new.html"
   }).when("/editor", {
     templateUrl: "./assets/templates/editor.html"
   });
