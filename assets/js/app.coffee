@@ -29,8 +29,10 @@ angular.module 'application',['ngRoute','restangular']
 
 	.factory 'utilsFactory',()->
 		{
+
 			getUsername : (url)->
 				return url.split('.')[0]
+
 			getPostTitle : (gitTitle)->
 				temp = gitTitle
 					.split '-'
@@ -38,6 +40,23 @@ angular.module 'application',['ngRoute','restangular']
 					.join " "
 				return temp
 					.split('.')[0]
+
+			generatePostTitle : (title) ->
+				today = new Date()
+				dd = today.getDate();
+				mm = today.getMonth()+1
+				yy = today.getFullYear()
+				if dd < 10
+					dd='0'+dd
+				if mm < 10
+					mm='0'+mm
+				date = yy+'-'+mm+'-'+dd+'-'
+				title_part = title
+					.split(" ")
+					.join("-")
+					.concat(".md")
+				return date.concat title_part
+
 		}
 
 	.controller 'tokenController',($scope,tokenFactory)->
@@ -80,3 +99,11 @@ angular.module 'application',['ngRoute','restangular']
 			.then (response)->
 				$scope.posts = response
 				
+
+	.controller 'newController',($scope,$window,Restangular,utilsFactory)->
+		$scope.url = $window.localStorage.getItem 'url'
+		$scope.token = $window.localStorage.getItem 'token'
+		$scope.username = utilsFactory.getUsername $window.localStorage.getItem 'url'
+
+		$scope.createNew = ()->
+			alert utilsFactory.generatePostTitle $scope.postTitle

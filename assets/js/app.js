@@ -31,6 +31,22 @@ angular.module('application', ['ngRoute', 'restangular']).config(function($route
       var temp;
       temp = gitTitle.split('-').slice(3).join(" ");
       return temp.split('.')[0];
+    },
+    generatePostTitle: function(title) {
+      var date, dd, mm, title_part, today, yy;
+      today = new Date();
+      dd = today.getDate();
+      mm = today.getMonth() + 1;
+      yy = today.getFullYear();
+      if (dd < 10) {
+        dd = '0' + dd;
+      }
+      if (mm < 10) {
+        mm = '0' + mm;
+      }
+      date = yy + '-' + mm + '-' + dd + '-';
+      title_part = title.split(" ").join("-").concat(".md");
+      return date.concat(title_part);
     }
   };
 }).controller('tokenController', function($scope, tokenFactory) {
@@ -66,4 +82,11 @@ angular.module('application', ['ngRoute', 'restangular']).config(function($route
   }).one('/repos/' + $scope.username + '/' + $scope.url + '/contents/_posts').get().then(function(response) {
     return $scope.posts = response;
   });
+}).controller('newController', function($scope, $window, Restangular, utilsFactory) {
+  $scope.url = $window.localStorage.getItem('url');
+  $scope.token = $window.localStorage.getItem('token');
+  $scope.username = utilsFactory.getUsername($window.localStorage.getItem('url'));
+  return $scope.createNew = function() {
+    return alert(utilsFactory.generatePostTitle($scope.postTitle));
+  };
 });

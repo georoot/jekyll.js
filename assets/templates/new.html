@@ -1,14 +1,14 @@
-	<a href="#/" class="close float-right"></a>
-<div class="container">
+<a href="#/" class="close float-right"></a>
+<div class="container" ng-controller="newController">
 	<!-- code to get github personal token starts here -->
-	<form class="container" ng-controller="tokenController">
+	<form class="container">
 		<div class="row" style="padding-top: 130px;">
 			<fieldset class="column column-50 column-offset-25">
 				<h3 class="center">
 				Create new post
 				</h3>
-				<input type="text" placeholder="My awesome post title" style="margin-top: 40px;">
-				<input class="button-primary button-outline" type="submit" value="Create new post">
+				<input type="text" placeholder="My awesome post title" style="margin-top: 40px;" ng-model="postTitle">
+				<input class="button-primary button-outline" type="submit" value="Create new post" ng-click="createNew()">
 			</fieldset>
 		</div>
 	</form>
