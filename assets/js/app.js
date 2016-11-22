@@ -5,14 +5,33 @@ angular.module('application', ['ngRoute', 'restangular']).config(function($route
   }).when("/editor", {
     templateUrl: "./assets/templates/editor.html"
   });
-}).controller('tokenController', function($scope, $window) {
+}).factory('tokenFactory', function($window, $rootScope) {
+  return {
+    saveProfile: function(url, token) {
+      $window.localStorage.setItem('token', token);
+      $window.localStorage.setItem('url', url);
+      return $rootScope.$broadcast('tokenEvent');
+    },
+    clearProfile: function() {
+      $window.localStorage.setItem('token', false);
+      $window.localStorage.setItem('url', false);
+      return $rootScope.$broadcast('tokenEvent');
+    }
+  };
+}).controller('tokenController', function($scope, tokenFactory) {
   $scope.tokenMsg = 0;
-  console.log($window.localStorage.getItem("token"));
   return $scope.newToken = function() {
     if (!$scope.token || !$scope.url) {
       $scope.tokenMsg = "Please fill in complete details on form";
     }
-    $window.localStorage.setItem('token', $scope.token);
-    return $window.localStorage.setItem('url', $scope.url);
+    return tokenFactory.saveProfile($scope.url, $scope.token);
   };
+}).controller('navController', function($scope, $rootScope, $window, tokenFactory) {
+  $scope.authenticated = $window.localStorage.getItem('token');
+  $scope.logout = function() {
+    return tokenFactory.clearProfile();
+  };
+  return $rootScope.$on("tokenEvent", function() {
+    return $scope.authenticated = $window.localStorage.getItem('token');
+  });
 });

@@ -8,11 +8,32 @@ angular.module 'application',['ngRoute','restangular']
 			templateUrl : "./assets/templates/editor.html"
 		}
 
-	.controller 'tokenController',($scope,$window)->
+	.factory 'tokenFactory',($window,$rootScope)->
+		{
+			saveProfile : (url,token)->
+				$window.localStorage.setItem 'token',token
+				$window.localStorage.setItem 'url',url
+				$rootScope.$broadcast 'tokenEvent'
+
+			clearProfile : ()->
+				$window.localStorage.setItem 'token',false
+				$window.localStorage.setItem 'url',false
+				$rootScope.$broadcast 'tokenEvent'
+		}
+
+	.controller 'tokenController',($scope,tokenFactory)->
 		$scope.tokenMsg = 0
-		console.log $window.localStorage.getItem "token"
 		$scope.newToken = ()->
 			if !$scope.token or !$scope.url
 				$scope.tokenMsg = "Please fill in complete details on form"
-			$window.localStorage.setItem 'token',$scope.token
-			$window.localStorage.setItem 'url',$scope.url
+			tokenFactory.saveProfile $scope.url,$scope.token
+
+	.controller 'navController',($scope,$rootScope,$window,tokenFactory)->
+		$scope.authenticated = $window.localStorage.getItem 'token'
+
+		$scope.logout = ()->
+			tokenFactory.clearProfile()
+
+
+		$rootScope.$on "tokenEvent",()->
+			$scope.authenticated = $window.localStorage.getItem 'token'
