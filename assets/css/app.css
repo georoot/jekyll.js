@@ -1,0 +1,16 @@
+.inline li {
+	display: inline-block;
+	margin-left: 30px;
+}
+
+.right {
+	text-align: right;
+}
+
+#nav {
+	margin-top: 30px;
+}
+
+#settings {
+	margin-top: 120px;
+}
