@@ -4,40 +4,17 @@
 		<meta charset="UTF-8">
 		<title>Jekyll-editor</title>
 		<link href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.2.0/milligram.min.css" rel="stylesheet">
+		<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 		<link rel="stylesheet" href="./assets/css/app.css">
 	</head>
-	<body>
-		<!-- navbar code start here -->
-		<nav class="container" id="nav">
-			<div class="row">
-				<div class="column column-25">
-					Jekyll editor
-				</div>
-				<div class="column column-50 column-offset-25">
-					<ul class="inline right">
-						<li><a href="#settings">Settings</a></li>
-						<li><a href="#github">Github</a></li>
-						<li><a href="#contribute">Contribute</a></li>
-					</ul>
-				</div>
-			</div>
-		</nav>
-		<!-- navbar code ends here -->
-		<!-- code to get github personal token starts here -->
-		<form class="container" id="settings">
-			<div class="row">
-				<fieldset class="column column-50 column-offset-25">
-					<input type="text" placeholder="my-blog.github.io address" id="nameField">
-					<input type="text" placeholder="Github personal token" id="nameField">
-					<input class="button-primary" type="submit" value="Start editing">
-					<div class="float-right">
-						<p>
-							<a href="">How to get this token on github ?</a>
-						</p>
-					</div>
-				</fieldset>
-			</div>
-		</form>
-		<!-- code to get github personal token ends here -->
+	<body ng-app="application">
+		<div ng-view></div>
+		<!-- script imports starts here -->
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+		<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/restangular/1.5.1/restangular.min.js"></script>
+		<script src="./assets/js/app.js"></script>
+		<!-- script imports ends here -->
 	</body>
 </html>

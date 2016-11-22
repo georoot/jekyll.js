@@ -7,10 +7,14 @@
 	text-align: right;
 }
 
+.center {
+	text-align: center;
+}
+
 #nav {
 	margin-top: 30px;
 }
 
 #settings {
-	margin-top: 120px;
+	margin-top: 60px;
 }

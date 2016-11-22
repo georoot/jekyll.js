@@ -1,0 +1,22 @@
+<!-- code to get github personal token starts here -->
+<form class="container" id="settings" ng-controller="tokenController">
+	<div class="row">
+		<fieldset class="column column-50 column-offset-25">
+		<h4 class="center">
+			Authentication on this device
+		</h4>
+			<blockquote ng-if="tokenMsg !== 0">
+				<p><em>{{ tokenMsg }}</em></p>
+			</blockquote>
+			<input type="text" placeholder="my-blog.github.io address" ng-model="url">
+			<input type="text" placeholder="Github personal token" id="nameField" ng-model="token">
+			<input class="button-primary button-outline" type="submit" value="Start editing" ng-click="newToken()">
+			<div class="float-right">
+				<p>
+					<a target="_blank" href="https://github.com/blog/1509-personal-api-tokens">How to get personal token on github ?</a>
+				</p>
+			</div>
+		</fieldset>
+	</div>
+</form>
+<!-- code to get github personal token ends here -->
