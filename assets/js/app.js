@@ -58,8 +58,8 @@ angular.module('application', ['ngRoute', 'restangular']).config(function($route
     getPostContentFromBlob: function(blob) {
       return blob.split("---").slice(2).join("---");
     },
-    generateBlob: function(blob, postContent) {
-      return "---".concat(blob.split("---").slice(1).join("---")).concat(postContent);
+    generateBlob: function(blob, blogContent) {
+      return "---".concat(blob.split("---")[1]).concat("---\n\n").concat(blogContent);
     }
   };
 }).controller('tokenController', function($scope, tokenFactory) {

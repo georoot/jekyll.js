@@ -71,8 +71,8 @@ angular.module 'application',['ngRoute','restangular']
 					.slice 2
 					.join "---"
 
-			generateBlob : (blob,postContent)->
-				"---".concat((blob.split("---").slice(1).join("---"))).concat(postContent)
+			generateBlob : (blob,blogContent)->
+				return "---".concat(blob.split("---")[1]).concat("---\n\n").concat(blogContent)
 		}
 
 	.controller 'tokenController',($scope,tokenFactory)->
