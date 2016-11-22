@@ -18,3 +18,7 @@
 #settings {
 	margin-top: 60px;
 }
+
+.postTitle:first-letter {
+	text-transform: capitalize;
+}

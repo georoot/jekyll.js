@@ -1,5 +1,5 @@
 angular.module 'application',['ngRoute','restangular']
-	.config ($routeProvider)->
+	.config ($routeProvider,RestangularProvider)->
 		$routeProvider
 		.when "/", {
 			templateUrl : "./assets/templates/landing.html",
@@ -8,6 +8,8 @@ angular.module 'application',['ngRoute','restangular']
 		.when "/editor", {
 			templateUrl : "./assets/templates/editor.html"
 		}
+		RestangularProvider.setBaseUrl "https://api.github.com/"
+		return
 
 	.factory 'tokenFactory',($window,$rootScope)->
 		{
@@ -20,6 +22,19 @@ angular.module 'application',['ngRoute','restangular']
 				$window.localStorage.setItem 'token',false
 				$window.localStorage.setItem 'url',false
 				$rootScope.$broadcast 'tokenEvent'
+		}
+
+	.factory 'utilsFactory',()->
+		{
+			getUsername : (url)->
+				return url.split('.')[0]
+			getPostTitle : (gitTitle)->
+				temp = gitTitle
+					.split '-'
+					.slice 3
+					.join " "
+				return temp
+					.split('.')[0]
 		}
 
 	.controller 'tokenController',($scope,tokenFactory)->
@@ -42,9 +57,23 @@ angular.module 'application',['ngRoute','restangular']
 			$scope.authenticated = $window.localStorage.getItem 'token'
 
 
-	.controller 'displayController',($scope,$window,$rootScope)->
+	.controller 'displayController',($scope,$window,$rootScope,Restangular)->
 		$scope.authenticated = $window.localStorage.getItem 'token'
-
+		
 		$rootScope.$on "tokenEvent",()->
 			$scope.authenticated = $window.localStorage.getItem 'token'
 
+
+	.controller 'dashboardController',($scope,$window,Restangular,utilsFactory)->
+		$scope.utils = utilsFactory
+		$scope.url = $window.localStorage.getItem 'url'
+		$scope.token = $window.localStorage.getItem 'token'
+		$scope.username = utilsFactory.getUsername $window.localStorage.getItem 'url'
+
+		Restangular
+			.setDefaultHeaders {'Authorization': 'Basic '+$scope.token}
+			.one '/repos/'+$scope.username+'/'+$scope.url+'/contents/_posts'
+			.get()
+			.then (response)->
+				$scope.posts = response
+				

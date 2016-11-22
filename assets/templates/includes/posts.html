@@ -1,9 +1,9 @@
-<div class="container">
+<div class="container" ng-controller="dashboardController">
 	<div class="row">
 		<div class="column column-50">
 			<h5>Published posts</h5>
 			<ul>
-				<li><a href="">How to kick some serious ass</a></li>
+				<li ng-repeat="post in posts.slice().reverse()"><a href=""><p class="postTitle">{{utils.getPostTitle(post.name)}}</p></a></li>
 			</ul>
 		</div>
 		<div class="column column-50">
