@@ -5,8 +5,9 @@ angular.module('application', ['ngRoute', 'restangular']).config(function($route
     controller: "displayController"
   }).when("/new", {
     templateUrl: "./assets/templates/new.html"
-  }).when("/editor", {
-    templateUrl: "./assets/templates/editor.html"
+  }).when("/editor/:basename", {
+    templateUrl: "./assets/templates/editor.html",
+    controller: "editorController"
   });
   RestangularProvider.setBaseUrl("https://api.github.com/");
 }).factory('tokenFactory', function($window, $rootScope) {
@@ -47,6 +48,18 @@ angular.module('application', ['ngRoute', 'restangular']).config(function($route
       date = yy + '-' + mm + '-' + dd + '-';
       title_part = title.split(" ").join("-").concat(".md");
       return date.concat(title_part);
+    },
+    encode: function(title) {
+      return btoa(title);
+    },
+    decode: function(blob) {
+      return atob(blob);
+    },
+    getPostContentFromBlob: function(blob) {
+      return blob.split("---").slice(2).join("---");
+    },
+    generateBlob: function(blob, postContent) {
+      return "---".concat(blob.split("---").slice(1).join("---")).concat(postContent);
     }
   };
 }).controller('tokenController', function($scope, tokenFactory) {
@@ -86,7 +99,42 @@ angular.module('application', ['ngRoute', 'restangular']).config(function($route
   $scope.url = $window.localStorage.getItem('url');
   $scope.token = $window.localStorage.getItem('token');
   $scope.username = utilsFactory.getUsername($window.localStorage.getItem('url'));
+  $scope.initialCommitPre = "---\npublished: false\ntitle: ";
+  $scope.initialCommitPost = "\nlayout: post\n---\n\n";
   return $scope.createNew = function() {
-    return alert(utilsFactory.generatePostTitle($scope.postTitle));
+    var instance;
+    $scope.postFileName = utilsFactory.generatePostTitle($scope.postTitle);
+    instance = Restangular.setDefaultHeaders({
+      'Authorization': 'Basic ' + $scope.token
+    }).one('/repos/' + $scope.username + '/' + $scope.url + '/contents/_posts/' + $scope.postFileName);
+    instance.message = "CREATED : " + $scope.postTitle;
+    instance.content = utilsFactory.encode($scope.initialCommitPre + $scope.postTitle + $scope.initialCommitPost);
+    return instance.put().then(function(response) {
+      return alert("Successfull created");
+    }, function(response) {
+      return alert("Error while creating file");
+    });
+  };
+}).controller('editorController', function($scope, $window, $route, $routeParams, utilsFactory, Restangular) {
+  var instance;
+  $scope.utils = utilsFactory;
+  $scope.url = $window.localStorage.getItem('url');
+  $scope.token = $window.localStorage.getItem('token');
+  $scope.username = utilsFactory.getUsername($window.localStorage.getItem('url'));
+  $scope.fileName = utilsFactory.decode($routeParams.basename);
+  instance = Restangular.setDefaultHeaders({
+    'Authorization': 'Basic ' + $scope.token
+  }).one('/repos/' + $scope.username + '/' + $scope.url + '/contents/_posts/' + $scope.fileName).get().then(function(response) {
+    $scope.postResource = response;
+    return $scope.editorContent = utilsFactory.getPostContentFromBlob(utilsFactory.decode(response.content));
+  }, function(response) {
+    return alert(response);
+  });
+  return $scope.updatePost = function() {
+    var newContent;
+    newContent = utilsFactory.generateBlob(utilsFactory.decode($scope.postResource.content), $scope.editorContent);
+    $scope.postResource.message = "Update : " + utilsFactory.getPostTitle($scope.fileName);
+    $scope.postResource.content = utilsFactory.encode(newContent);
+    return $scope.postResource.put();
   };
 });

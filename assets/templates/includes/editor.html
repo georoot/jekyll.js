@@ -1,0 +1,9 @@
+<div class="container" ng-controller="editorController">
+	<h5 id="postTitle">
+		{{utils.getPostTitle(fileName)}}
+	</h5>
+	<textarea name="" id="" cols="30" rows="10" ng-model="editorContent">
+	</textarea>
+	<button class="button-primary button-outline" ng-click="updatePost()">Save post</button>
+	<button class="button-primary button-outline" ng-click="publishPost()">Publish post</button>
+</div>

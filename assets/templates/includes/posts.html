@@ -3,7 +3,7 @@
 		<div class="column column-50">
 			<h5>Published posts</h5>
 			<ul>
-				<li ng-repeat="post in posts.slice().reverse()"><a href=""><p class="postTitle">{{utils.getPostTitle(post.name)}}</p></a></li>
+				<li ng-repeat="post in posts.slice().reverse()"><a href="#/editor/{{utils.encode(post.name)}}"><p class="postTitle">{{utils.getPostTitle(post.name)}}</p></a></li>
 			</ul>
 			<!-- <i class="fa fa-github fa-5x" aria-hidden="true" id="preloader"></i> -->
 		</div>

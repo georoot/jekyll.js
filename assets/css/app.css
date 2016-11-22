@@ -79,3 +79,7 @@
 	from { color: blue; }
 	to { color: red; }
 }
+
+#postTitle {
+	margin-top: -50px;
+}
