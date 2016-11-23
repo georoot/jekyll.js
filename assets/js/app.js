@@ -72,7 +72,7 @@ angular.module('application', ['ngRoute', 'restangular']).config(function($route
         headerTest = explodeContent[i].split(":");
         if (headerTest.length === 2 && headerTest[0] === "published") {
           headerTest[1] = "true";
-          explodeContent[i] = headerTest.join(":");
+          explodeContent[i] = headerTest.join(": ");
         }
       }
       return explodeContent.join("\n");
@@ -116,7 +116,7 @@ angular.module('application', ['ngRoute', 'restangular']).config(function($route
   $scope.token = $window.localStorage.getItem('token');
   $scope.username = utilsFactory.getUsername($window.localStorage.getItem('url'));
   $scope.initialCommitPre = "---\npublished: false\ntitle: ";
-  $scope.initialCommitPost = "\nlayout: post\n---\n\n";
+  $scope.initialCommitPost = "\nlayout: post\n---\n";
   return $scope.createNew = function() {
     var instance;
     $scope.postFileName = utilsFactory.generatePostTitle($scope.postTitle);

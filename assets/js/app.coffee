@@ -81,7 +81,7 @@ angular.module 'application',['ngRoute','restangular']
 					headerTest = explodeContent[i].split(":")
 					if headerTest.length == 2 and headerTest[0] == "published"
 						headerTest[1] = "true"
-						explodeContent[i] = headerTest.join(":")
+						explodeContent[i] = headerTest.join(": ")
 
 				return explodeContent.join("\n") 
 				
@@ -134,7 +134,7 @@ angular.module 'application',['ngRoute','restangular']
 		$scope.username = utilsFactory.getUsername $window.localStorage.getItem 'url'
 
 		$scope.initialCommitPre  = "---\npublished: false\ntitle: "
-		$scope.initialCommitPost ="\nlayout: post\n---\n\n"
+		$scope.initialCommitPost ="\nlayout: post\n---\n"
 
 		$scope.createNew = ()->
 			$scope.postFileName = utilsFactory.generatePostTitle $scope.postTitle
