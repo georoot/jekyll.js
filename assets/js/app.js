@@ -111,7 +111,7 @@ angular.module('application', ['ngRoute', 'restangular']).config(function($route
   }).one('/repos/' + $scope.username + '/' + $scope.url + '/contents/_posts').get().then(function(response) {
     return $scope.posts = response;
   });
-}).controller('newController', function($scope, $window, Restangular, utilsFactory) {
+}).controller('newController', function($scope, $window, $location, Restangular, utilsFactory) {
   $scope.url = $window.localStorage.getItem('url');
   $scope.token = $window.localStorage.getItem('token');
   $scope.username = utilsFactory.getUsername($window.localStorage.getItem('url'));
@@ -126,7 +126,9 @@ angular.module('application', ['ngRoute', 'restangular']).config(function($route
     instance.message = "CREATED : " + $scope.postTitle;
     instance.content = utilsFactory.encode($scope.initialCommitPre + $scope.postTitle + $scope.initialCommitPost);
     return instance.put().then(function(response) {
-      return alert("Successfull created");
+      var encodedFileName;
+      encodedFileName = utilsFactory.encode($scope.postFileName);
+      return $location.path('/editor/' + encodedFileName);
     }, function(response) {
       return alert("Error while creating file");
     });
@@ -140,6 +142,7 @@ angular.module('application', ['ngRoute', 'restangular']).config(function($route
   $scope.fileName = utilsFactory.decode($routeParams.basename);
   $scope.ctrlDown = false;
   $scope.ctrlKey = 17;
+  $scope.message = 0;
   $scope.keyDownFunc = function($event) {
     if ($scope.ctrlDown && String.fromCharCode($event.which).toLowerCase() === 'c') {
       return alert("Saving the document now");
@@ -171,7 +174,8 @@ angular.module('application', ['ngRoute', 'restangular']).config(function($route
     newContent = utilsFactory.generateBlob(utilsFactory.decode($scope.postResource.content), $scope.editorContent);
     $scope.postResource.message = "Update : " + utilsFactory.getPostTitle($scope.fileName);
     $scope.postResource.content = utilsFactory.encode(newContent);
-    return $scope.postResource.put();
+    $scope.postResource.put();
+    return $scope.message = "Post saved in drafts";
   };
   $scope.publishPost = function() {
     var newContent, publishedContent;
@@ -179,18 +183,17 @@ angular.module('application', ['ngRoute', 'restangular']).config(function($route
     publishedContent = utilsFactory.publishBlob(newContent);
     $scope.postResource.message = "Publish : " + utilsFactory.getPostTitle($scope.fileName);
     $scope.postResource.content = utilsFactory.encode(publishedContent);
-    return $scope.postResource.put();
+    $scope.postResource.put();
+    return $scope.message = "Post published on blog";
   };
   $scope.editorInit = function() {
     var languageOverrides;
-    console.log("Initializing base editor");
     return languageOverrides = {
       js: 'javascript',
       html: 'xml'
     };
   };
   $scope.renderHtml = function() {
-    console.log("renderHtml");
     $scope.renderPreview = $scope.md.render($scope.editorContent);
     return $scope.html = $sce.trustAsHtml($scope.renderPreview);
   };

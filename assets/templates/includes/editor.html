@@ -2,6 +2,7 @@
 	<span id="form-control">
 		<button class="button-primary button-outline" ng-click="updatePost()">Save post</button>
 		<button class="button-primary button-outline" ng-click="publishPost()">Publish post</button>
+		<span id="message" ng-if="message!=0">Notification : {{message}}</span>
 	</span>
 	<a href="#/" class="close" style="position: fixed;right: 30px;top: 20px;z-index: 999"></a>
 	<div id="in"><textarea id="code" ng-model="editorContent"></textarea></div>

@@ -284,3 +284,8 @@
   left :30px;
   top:20px;
 }
+
+#message {
+  margin-left: 40px;
+  color: #9b4dca;
+}

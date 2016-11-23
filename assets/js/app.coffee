@@ -128,7 +128,7 @@ angular.module 'application',['ngRoute','restangular']
 				$scope.posts = response
 				
 
-	.controller 'newController',($scope,$window,Restangular,utilsFactory)->
+	.controller 'newController',($scope,$window,$location,Restangular,utilsFactory)->
 		$scope.url = $window.localStorage.getItem 'url'
 		$scope.token = $window.localStorage.getItem 'token'
 		$scope.username = utilsFactory.getUsername $window.localStorage.getItem 'url'
@@ -141,14 +141,19 @@ angular.module 'application',['ngRoute','restangular']
 			instance = Restangular
 				.setDefaultHeaders {'Authorization': 'Basic '+$scope.token}
 				.one '/repos/'+$scope.username+'/'+$scope.url+'/contents/_posts/'+$scope.postFileName
-
 			instance.message = "CREATED : "+$scope.postTitle
 			instance.content = utilsFactory.encode($scope.initialCommitPre+$scope.postTitle+$scope.initialCommitPost)
 			instance.put()
 				.then (response)->
-					alert "Successfull created"
+					# Redirect to editor
+					# encode $scope.postFileName and redirect
+					encodedFileName = utilsFactory.encode $scope.postFileName
+					$location.path '/editor/'+encodedFileName
+					# alert "Successfull created"
 				,(response)->
 					alert "Error while creating file"
+
+
 
 	.controller 'editorController',($scope,$window,$route, $routeParams,utilsFactory,Restangular,$sce)->
 		$scope.utils = utilsFactory
@@ -159,6 +164,8 @@ angular.module 'application',['ngRoute','restangular']
 
 		$scope.ctrlDown = false;
 		$scope.ctrlKey = 17
+
+		$scope.message = 0
 
 
 		$scope.keyDownFunc = ($event)->
@@ -193,6 +200,7 @@ angular.module 'application',['ngRoute','restangular']
 			$scope.postResource.message = "Update : "+utilsFactory.getPostTitle $scope.fileName
 			$scope.postResource.content = utilsFactory.encode newContent
 			$scope.postResource.put()
+			$scope.message = "Post saved in drafts"
 
 		$scope.publishPost = ()->
 			newContent = utilsFactory.generateBlob(utilsFactory.decode($scope.postResource.content),$scope.editorContent)
@@ -200,18 +208,17 @@ angular.module 'application',['ngRoute','restangular']
 			$scope.postResource.message = "Publish : "+utilsFactory.getPostTitle $scope.fileName
 			$scope.postResource.content = utilsFactory.encode publishedContent
 			$scope.postResource.put()
+			$scope.message = "Post published on blog"
 
 
 		
 		$scope.editorInit = ()->
-			console.log "Initializing base editor"
 			languageOverrides = {
 					js: 'javascript',
 					html: 'xml'
 				}
 
 		$scope.renderHtml = ()->
-			console.log "renderHtml"
 			$scope.renderPreview = $scope.md.render $scope.editorContent
 			$scope.html = $sce.trustAsHtml $scope.renderPreview
 		
