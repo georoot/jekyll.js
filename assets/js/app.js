@@ -177,6 +177,9 @@ angular.module('application', ['ngRoute', 'restangular']).config(function($route
     $scope.renderPreview = $scope.md.render($scope.editorContent);
     return $scope.html = $sce.trustAsHtml($scope.renderPreview);
   };
+  $scope.$watch("editorContent", function() {
+    return $scope.renderHtml();
+  });
   $scope.md = markdownit({
     html: true,
     highlight: function(code, lang) {

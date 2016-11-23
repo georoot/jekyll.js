@@ -195,6 +195,9 @@ angular.module 'application',['ngRoute','restangular']
 			$scope.renderPreview = $scope.md.render $scope.editorContent
 			$scope.html = $sce.trustAsHtml $scope.renderPreview
 
+		$scope.$watch "editorContent",()->
+			$scope.renderHtml()
+
 		$scope.md =  markdownit {
 				html: true,
 				highlight: (code, lang)->
