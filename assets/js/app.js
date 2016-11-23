@@ -56,16 +56,9 @@ angular.module('application', ['ngRoute', 'restangular']).config(function($route
       return atob(blob);
     },
     getPostContentFromBlob: function(blob) {
-      var i, j, len, vsplitData;
+      var vsplitData;
       vsplitData = blob.split("---").slice(2).join("---").split("\n");
-      for (j = 0, len = vsplitData.length; j < len; j++) {
-        i = vsplitData[j];
-        if (i === "") {
-          vsplitData.splice(0, 1);
-        } else {
-          break;
-        }
-      }
+      vsplitData = vsplitData.splice(1);
       return vsplitData.join("\n");
     },
     generateBlob: function(blob, blogContent) {

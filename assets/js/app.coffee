@@ -67,13 +67,8 @@ angular.module 'application',['ngRoute','restangular']
 
 			getPostContentFromBlob : (blob)->
 				vsplitData = blob.split("---").slice(2).join("---").split("\n")
-				for i in vsplitData
-					if i == ""
-						vsplitData.splice(0,1)
-					else
-						break
-				return vsplitData.join("\n")
-					
+				vsplitData = vsplitData.splice(1)
+				vsplitData.join("\n")
 				
 
 			generateBlob : (blob,blogContent)->
