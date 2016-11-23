@@ -157,6 +157,24 @@ angular.module 'application',['ngRoute','restangular']
 		$scope.username = utilsFactory.getUsername $window.localStorage.getItem 'url'
 		$scope.fileName = utilsFactory.decode $routeParams.basename
 
+		$scope.ctrlDown = false;
+		$scope.ctrlKey = 17
+
+
+		$scope.keyDownFunc = ($event)->
+			if ($scope.ctrlDown && String.fromCharCode($event.which).toLowerCase() == 'c')
+				alert "Saving the document now"
+
+		angular.element($window).bind "keyup",($event)->
+			if ($event.keyCode == $scope.ctrlKey)
+				$scope.ctrlDown = false
+			$scope.$apply()
+
+		angular.element($window).bind "keydown",($event)->
+			if $event.keyCode == $scope.ctrlKey
+				$scope.ctrlDown = true
+			$scope.$apply()
+
 		instance = Restangular
 			.setDefaultHeaders {'Authorization': 'Basic '+$scope.token}
 			.one '/repos/'+$scope.username+'/'+$scope.url+'/contents/_posts/'+$scope.fileName

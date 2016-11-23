@@ -95,15 +95,16 @@
     }
 
     #in{
+      border: 0px;
       position: fixed;
-      top: 0;
+      top: 70px;
       left: 0;
       bottom: 0;
       width: 50%;
       height: auto;
       overflow: auto;
       font-size: 12px;
-      box-shadow: -10px 2px 6px 10px rgba(0,0,0,0.4);
+      /*box-shadow: -10px 2px 6px 10px rgba(0,0,0,0.4);*/
     }
 
     .CodeMirror {
@@ -122,8 +123,9 @@
     }
 
     #out{
+      border: 1px solid rgba(0,0,0,.3);
       position: fixed;
-      top: 0;
+      top: 70px;
       right: 0;
       left: 50%;
       bottom: 0;
@@ -275,4 +277,10 @@
 
 #code {
   height: 100% !important;
+}
+
+#form-control {
+  position: fixed;
+  left :30px;
+  top:20px;
 }

@@ -138,6 +138,25 @@ angular.module('application', ['ngRoute', 'restangular']).config(function($route
   $scope.token = $window.localStorage.getItem('token');
   $scope.username = utilsFactory.getUsername($window.localStorage.getItem('url'));
   $scope.fileName = utilsFactory.decode($routeParams.basename);
+  $scope.ctrlDown = false;
+  $scope.ctrlKey = 17;
+  $scope.keyDownFunc = function($event) {
+    if ($scope.ctrlDown && String.fromCharCode($event.which).toLowerCase() === 'c') {
+      return alert("Saving the document now");
+    }
+  };
+  angular.element($window).bind("keyup", function($event) {
+    if ($event.keyCode === $scope.ctrlKey) {
+      $scope.ctrlDown = false;
+    }
+    return $scope.$apply();
+  });
+  angular.element($window).bind("keydown", function($event) {
+    if ($event.keyCode === $scope.ctrlKey) {
+      $scope.ctrlDown = true;
+    }
+    return $scope.$apply();
+  });
   instance = Restangular.setDefaultHeaders({
     'Authorization': 'Basic ' + $scope.token
   }).one('/repos/' + $scope.username + '/' + $scope.url + '/contents/_posts/' + $scope.fileName).get().then(function(response) {
