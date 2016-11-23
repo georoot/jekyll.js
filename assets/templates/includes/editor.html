@@ -1,12 +1,10 @@
 <div class="container" ng-controller="editorController">
 	<h5 id="postTitle">
-		{{utils.getPostTitle(fileName)}}
+	{{utils.getPostTitle(fileName)}}
 	</h5>
-	<h5>
-		{{fileName}}
-	</h5>
-	<textarea name="" id="" style="min-height: 300px;" ng-model="editorContent">
-	</textarea>
-	<button class="button-primary button-outline" ng-click="updatePost()">Save post</button>
-	<button class="button-primary button-outline" ng-click="publishPost()">Publish post</button>
+	<a href="" class="close" style="position: fixed;right: 30px;top: 20px;"></a>
+	<div id="in"><form><textarea id="code" ng-model="editorContent"></textarea></form></div>
+	<div id="out" ng-bind-html="html"></div>
+	<!-- <button class="button-primary button-outline" ng-click="updatePost()">Save post</button> -->
+	<!-- <button class="button-primary button-outline" ng-click="publishPost()">Publish post</button> -->
 </div>

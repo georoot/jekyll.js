@@ -131,7 +131,7 @@ angular.module('application', ['ngRoute', 'restangular']).config(function($route
       return alert("Error while creating file");
     });
   };
-}).controller('editorController', function($scope, $window, $route, $routeParams, utilsFactory, Restangular) {
+}).controller('editorController', function($scope, $window, $route, $routeParams, utilsFactory, Restangular, $sce) {
   var instance;
   $scope.utils = utilsFactory;
   $scope.url = $window.localStorage.getItem('url');
@@ -142,7 +142,8 @@ angular.module('application', ['ngRoute', 'restangular']).config(function($route
     'Authorization': 'Basic ' + $scope.token
   }).one('/repos/' + $scope.username + '/' + $scope.url + '/contents/_posts/' + $scope.fileName).get().then(function(response) {
     $scope.postResource = response;
-    return $scope.editorContent = utilsFactory.getPostContentFromBlob(utilsFactory.decode(response.content));
+    $scope.editorContent = utilsFactory.getPostContentFromBlob(utilsFactory.decode(response.content));
+    return $scope.renderHtml();
   }, function(response) {
     return alert(response);
   });
@@ -153,7 +154,7 @@ angular.module('application', ['ngRoute', 'restangular']).config(function($route
     $scope.postResource.content = utilsFactory.encode(newContent);
     return $scope.postResource.put();
   };
-  return $scope.publishPost = function() {
+  $scope.publishPost = function() {
     var newContent, publishedContent;
     newContent = utilsFactory.generateBlob(utilsFactory.decode($scope.postResource.content), $scope.editorContent);
     publishedContent = utilsFactory.publishBlob(newContent);
@@ -161,4 +162,38 @@ angular.module('application', ['ngRoute', 'restangular']).config(function($route
     $scope.postResource.content = utilsFactory.encode(publishedContent);
     return $scope.postResource.put();
   };
+  $scope.editorInit = function() {
+    var languageOverrides;
+    console.log("Initializing base editor");
+    emojify.setConfig({
+      img_dir: 'emoji'
+    });
+    return languageOverrides = {
+      js: 'javascript',
+      html: 'xml'
+    };
+  };
+  $scope.renderHtml = function() {
+    $scope.renderPreview = $scope.md.render($scope.editorContent);
+    return $scope.html = $sce.trustAsHtml($scope.renderPreview);
+  };
+  $scope.md = markdownit({
+    html: true,
+    highlight: function(code, lang) {
+      var e;
+      if (languageOverrides[lang]) {
+        lang = languageOverrides[lang];
+      }
+      if (lang && hljs.getLanguage(lang)) {
+        try {
+          return hljs.highlight(lang, code).value;
+        } catch (error) {
+          e = error;
+          console.log("Some error");
+        }
+      }
+      return '';
+    }
+  }).use(markdownitFootnote);
+  return $scope.editorInit();
 });

@@ -150,7 +150,7 @@ angular.module 'application',['ngRoute','restangular']
 				,(response)->
 					alert "Error while creating file"
 
-	.controller 'editorController',($scope,$window,$route, $routeParams,utilsFactory,Restangular)->
+	.controller 'editorController',($scope,$window,$route, $routeParams,utilsFactory,Restangular,$sce)->
 		$scope.utils = utilsFactory
 		$scope.url = $window.localStorage.getItem 'url'
 		$scope.token = $window.localStorage.getItem 'token'
@@ -164,8 +164,10 @@ angular.module 'application',['ngRoute','restangular']
 			.then (response)->
 				$scope.postResource = response
 				$scope.editorContent = utilsFactory.getPostContentFromBlob utilsFactory.decode response.content
+				$scope.renderHtml()
 			,(response)->
 				alert response
+
 
 		$scope.updatePost = ()->
 			newContent = utilsFactory.generateBlob(utilsFactory.decode($scope.postResource.content),$scope.editorContent)
@@ -179,3 +181,35 @@ angular.module 'application',['ngRoute','restangular']
 			$scope.postResource.message = "Publish : "+utilsFactory.getPostTitle $scope.fileName
 			$scope.postResource.content = utilsFactory.encode publishedContent
 			$scope.postResource.put()
+
+
+		$scope.editorInit = ()->
+			console.log "Initializing base editor"
+			emojify.setConfig { img_dir: 'emoji' }
+			languageOverrides = {
+					js: 'javascript',
+					html: 'xml'
+				}
+
+		$scope.renderHtml = ()->
+			$scope.renderPreview = $scope.md.render $scope.editorContent
+			$scope.html = $sce.trustAsHtml $scope.renderPreview
+
+		$scope.md =  markdownit {
+				html: true,
+				highlight: (code, lang)->
+					if languageOverrides[lang]
+						lang = languageOverrides[lang];
+					if lang and hljs.getLanguage(lang)
+						try
+							return hljs.highlight(lang, code).value;
+						catch e
+							console.log "Some error"
+					return '';
+			}
+			.use(markdownitFootnote)
+
+
+
+
+		$scope.editorInit()
