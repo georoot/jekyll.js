@@ -63,6 +63,19 @@ angular.module('application', ['ngRoute', 'restangular']).config(function($route
     },
     generateBlob: function(blob, blogContent) {
       return "---".concat(blob.split("---")[1]).concat("---\n").concat(blogContent);
+    },
+    publishBlob: function(blog) {
+      var explodeContent, headerTest, i, j, len, ref;
+      explodeContent = blog.split("\n");
+      len = explodeContent.length;
+      for (i = j = 0, ref = len - 1; j < ref; i = j += 1) {
+        headerTest = explodeContent[i].split(":");
+        if (headerTest.length === 2 && headerTest[0] === "published") {
+          headerTest[1] = "true";
+          explodeContent[i] = headerTest.join(":");
+        }
+      }
+      return explodeContent.join("\n");
     }
   };
 }).controller('tokenController', function($scope, tokenFactory) {
@@ -141,6 +154,11 @@ angular.module('application', ['ngRoute', 'restangular']).config(function($route
     return $scope.postResource.put();
   };
   return $scope.publishPost = function() {
-    return console.log("Toggle the part published == true and update post");
+    var newContent, publishedContent;
+    newContent = utilsFactory.generateBlob(utilsFactory.decode($scope.postResource.content), $scope.editorContent);
+    publishedContent = utilsFactory.publishBlob(newContent);
+    $scope.postResource.message = "Publish : " + utilsFactory.getPostTitle($scope.fileName);
+    $scope.postResource.content = utilsFactory.encode(publishedContent);
+    return $scope.postResource.put();
   };
 });

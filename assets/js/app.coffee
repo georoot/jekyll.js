@@ -73,6 +73,18 @@ angular.module 'application',['ngRoute','restangular']
 
 			generateBlob : (blob,blogContent)->
 				return "---".concat(blob.split("---")[1]).concat("---\n").concat(blogContent)
+
+			publishBlob  : (blog)->
+				explodeContent = blog.split("\n")
+				len = explodeContent.length
+				for i in [0...len - 1] by 1
+					headerTest = explodeContent[i].split(":")
+					if headerTest.length == 2 and headerTest[0] == "published"
+						headerTest[1] = "true"
+						explodeContent[i] = headerTest.join(":")
+
+				return explodeContent.join("\n") 
+				
 		}
 
 	.controller 'tokenController',($scope,tokenFactory)->
@@ -162,4 +174,8 @@ angular.module 'application',['ngRoute','restangular']
 			$scope.postResource.put()
 
 		$scope.publishPost = ()->
-			console.log "Toggle the part published == true and update post"
+			newContent = utilsFactory.generateBlob(utilsFactory.decode($scope.postResource.content),$scope.editorContent)
+			publishedContent = utilsFactory.publishBlob newContent
+			$scope.postResource.message = "Publish : "+utilsFactory.getPostTitle $scope.fileName
+			$scope.postResource.content = utilsFactory.encode publishedContent
+			$scope.postResource.put()
