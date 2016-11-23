@@ -165,6 +165,7 @@ angular.module 'application',['ngRoute','restangular']
 				$scope.postResource = response
 				$scope.editorContent = utilsFactory.getPostContentFromBlob utilsFactory.decode response.content
 				$scope.renderHtml()
+				# $scope.renderEditor()
 			,(response)->
 				alert response
 
@@ -183,17 +184,36 @@ angular.module 'application',['ngRoute','restangular']
 			$scope.postResource.put()
 
 
+		
 		$scope.editorInit = ()->
 			console.log "Initializing base editor"
-			emojify.setConfig { img_dir: 'emoji' }
 			languageOverrides = {
 					js: 'javascript',
 					html: 'xml'
 				}
 
 		$scope.renderHtml = ()->
+			console.log "renderHtml"
 			$scope.renderPreview = $scope.md.render $scope.editorContent
 			$scope.html = $sce.trustAsHtml $scope.renderPreview
+		
+		# $scope.updateUI = (e)->
+		# 	$scope.renderPreview = $scope.md.render e.getValue()
+		# 	$scope.html = $sce.trustAsHtml $scope.renderPreview
+		# 	$scope.renderHtml()
+
+		# $scope.renderEditor = ()->
+		# 	editor = CodeMirror.fromTextArea document.getElementById('code'), {
+		# 			mode: 'gfm',
+		# 			lineNumbers: false,
+		# 			matchBrackets: true,
+		# 			lineWrapping: true,
+		# 			theme: 'base16-light',
+		# 			extraKeys: {"Enter": "newlineAndIndentContinueMarkdownList"}
+		# 			}
+		# 	editor.on 'change', $scope.updateUI
+
+
 
 		$scope.$watch "editorContent",()->
 			$scope.renderHtml()

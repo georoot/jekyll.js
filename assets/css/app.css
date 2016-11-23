@@ -268,3 +268,11 @@
     td, th { vertical-align: top; padding: 4px 10px; border: 1px solid #bbb; }
     tr:nth-child(even) td, tr:nth-child(even) th { background: #eee; }
 /*inline style from markdown editor ends here*/
+
+#in {
+  overflow: hidden;
+}
+
+#code {
+  height: 100% !important;
+}

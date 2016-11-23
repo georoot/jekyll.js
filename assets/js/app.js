@@ -165,15 +165,13 @@ angular.module('application', ['ngRoute', 'restangular']).config(function($route
   $scope.editorInit = function() {
     var languageOverrides;
     console.log("Initializing base editor");
-    emojify.setConfig({
-      img_dir: 'emoji'
-    });
     return languageOverrides = {
       js: 'javascript',
       html: 'xml'
     };
   };
   $scope.renderHtml = function() {
+    console.log("renderHtml");
     $scope.renderPreview = $scope.md.render($scope.editorContent);
     return $scope.html = $sce.trustAsHtml($scope.renderPreview);
   };
