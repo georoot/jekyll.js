@@ -66,7 +66,15 @@ angular.module 'application',['ngRoute','restangular']
 
 
 			getPostContentFromBlob : (blob)->
-				blob.split("---").slice(2).join("---")
+				vsplitData = blob.split("---").slice(2).join("---").split("\n")
+				for i in vsplitData
+					if i == ""
+						vsplitData.splice(0,1)
+					else
+						break
+				return vsplitData.join("\n")
+					
+				
 
 			generateBlob : (blob,blogContent)->
 				return "---".concat(blob.split("---")[1]).concat("---\n").concat(blogContent)
@@ -157,3 +165,6 @@ angular.module 'application',['ngRoute','restangular']
 			$scope.postResource.message = "Update : "+utilsFactory.getPostTitle $scope.fileName
 			$scope.postResource.content = utilsFactory.encode newContent
 			$scope.postResource.put()
+
+		$scope.publishPost = ()->
+			console.log "Toggle the part published == true and update post"

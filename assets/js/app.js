@@ -56,7 +56,17 @@ angular.module('application', ['ngRoute', 'restangular']).config(function($route
       return atob(blob);
     },
     getPostContentFromBlob: function(blob) {
-      return blob.split("---").slice(2).join("---");
+      var i, j, len, vsplitData;
+      vsplitData = blob.split("---").slice(2).join("---").split("\n");
+      for (j = 0, len = vsplitData.length; j < len; j++) {
+        i = vsplitData[j];
+        if (i === "") {
+          vsplitData.splice(0, 1);
+        } else {
+          break;
+        }
+      }
+      return vsplitData.join("\n");
     },
     generateBlob: function(blob, blogContent) {
       return "---".concat(blob.split("---")[1]).concat("---\n").concat(blogContent);
@@ -130,11 +140,14 @@ angular.module('application', ['ngRoute', 'restangular']).config(function($route
   }, function(response) {
     return alert(response);
   });
-  return $scope.updatePost = function() {
+  $scope.updatePost = function() {
     var newContent;
     newContent = utilsFactory.generateBlob(utilsFactory.decode($scope.postResource.content), $scope.editorContent);
     $scope.postResource.message = "Update : " + utilsFactory.getPostTitle($scope.fileName);
     $scope.postResource.content = utilsFactory.encode(newContent);
     return $scope.postResource.put();
+  };
+  return $scope.publishPost = function() {
+    return console.log("Toggle the part published == true and update post");
   };
 });
