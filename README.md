@@ -8,7 +8,7 @@ They can be generated from [here](https://github.com/settings/tokens). Remember 
 
 ### Installation
 
-You can simply add the git repo as a submodule in your jekyll post. Alternatively you can also use the editor at [georoot.github.io](georoot.github.io/jekyll-editor/). Because the `personal tokens` are only saved on local browser, make sure to logout if you are working on a not personal system.
+You can simply add the git repo as a submodule in your jekyll post. Alternatively you can also use the editor at [georoot.github.io](georoot.github.io/jekyll.js/). Because the `personal tokens` are only saved on local browser, make sure to logout if you are working on a not personal system.
 
 ### Note
 
