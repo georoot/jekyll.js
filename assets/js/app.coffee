@@ -155,7 +155,7 @@ angular.module 'application',['ngRoute','restangular']
 
 
 
-	.controller 'editorController',($scope,$window,$route, $routeParams,utilsFactory,Restangular,$sce)->
+	.controller 'editorController',($scope,$window,$route, $routeParams,utilsFactory,Restangular,$sce,$location)->
 		$scope.utils = utilsFactory
 		$scope.url = $window.localStorage.getItem 'url'
 		$scope.token = $window.localStorage.getItem 'token'
@@ -210,6 +210,11 @@ angular.module 'application',['ngRoute','restangular']
 			$scope.postResource.put()
 			$scope.message = "Post published on blog"
 
+		$scope.deletePost = ()->
+			console.log "Removing the post"
+			$scope.postResource.message = "Delete : "+utilsFactory.getPostTitle $scope.fileName
+			$scope.postResource.remove()
+			$location.path "/"
 
 		
 		$scope.editorInit = ()->

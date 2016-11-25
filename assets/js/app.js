@@ -133,7 +133,7 @@ angular.module('application', ['ngRoute', 'restangular']).config(function($route
       return alert("Error while creating file");
     });
   };
-}).controller('editorController', function($scope, $window, $route, $routeParams, utilsFactory, Restangular, $sce) {
+}).controller('editorController', function($scope, $window, $route, $routeParams, utilsFactory, Restangular, $sce, $location) {
   var instance;
   $scope.utils = utilsFactory;
   $scope.url = $window.localStorage.getItem('url');
@@ -185,6 +185,12 @@ angular.module('application', ['ngRoute', 'restangular']).config(function($route
     $scope.postResource.content = utilsFactory.encode(publishedContent);
     $scope.postResource.put();
     return $scope.message = "Post published on blog";
+  };
+  $scope.deletePost = function() {
+    console.log("Removing the post");
+    $scope.postResource.message = "Delete : " + utilsFactory.getPostTitle($scope.fileName);
+    $scope.postResource.remove();
+    return $location.path("/");
   };
   $scope.editorInit = function() {
     var languageOverrides;

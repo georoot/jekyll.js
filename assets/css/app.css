@@ -289,3 +289,8 @@
   margin-left: 40px;
   color: #9b4dca;
 }
+
+.button-danger {
+  border-color: red !important;
+  color: red !important;
+}
