@@ -119,12 +119,14 @@ angular.module 'application',['ngRoute','restangular']
 		$scope.url = $window.localStorage.getItem 'url'
 		$scope.token = $window.localStorage.getItem 'token'
 		$scope.username = utilsFactory.getUsername $window.localStorage.getItem 'url'
+		$scope.loading = '1'
 
 		Restangular
 			.setDefaultHeaders {'Authorization': 'Basic '+$scope.token}
 			.one '/repos/'+$scope.username+'/'+$scope.url+'/contents/_posts'
 			.get()
 			.then (response)->
+				$scope.loading = '0'
 				$scope.posts = response
 				
 

@@ -106,9 +106,11 @@ angular.module('application', ['ngRoute', 'restangular']).config(function($route
   $scope.url = $window.localStorage.getItem('url');
   $scope.token = $window.localStorage.getItem('token');
   $scope.username = utilsFactory.getUsername($window.localStorage.getItem('url'));
+  $scope.loading = '1';
   return Restangular.setDefaultHeaders({
     'Authorization': 'Basic ' + $scope.token
   }).one('/repos/' + $scope.username + '/' + $scope.url + '/contents/_posts').get().then(function(response) {
+    $scope.loading = '0';
     return $scope.posts = response;
   });
 }).controller('newController', function($scope, $window, $location, Restangular, utilsFactory) {

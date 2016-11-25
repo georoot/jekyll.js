@@ -60,24 +60,24 @@
 
 
 @-webkit-keyframes color_change {
-	from { color: blue; }
-	to { color: red; }
+	from { color: #9b4dca; }
+	to { color: gray; }
 }
 @-moz-keyframes color_change {
-	from { color: blue; }
-	to { color: red; }
+	from { color: #9b4dca; }
+	to { color: gray; }
 }
 @-ms-keyframes color_change {
-	from { color: blue; }
-	to { color: red; }
+	from { color: #9b4dca; }
+	to { color: gray; }
 }
 @-o-keyframes color_change {
-	from { color: blue; }
-	to { color: red; }
+	from { color: #9b4dca; }
+	to { color: gray; }
 }
 @keyframes color_change {
-	from { color: blue; }
-	to { color: red; }
+	from { color: #9b4dca; }
+	to { color: gray; }
 }
 
 #postTitle {
