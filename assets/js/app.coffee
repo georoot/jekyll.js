@@ -108,6 +108,12 @@ angular.module 'application',['ngRoute','restangular']
 
 
 	.controller 'displayController',($scope,$window,$rootScope,Restangular)->
+		try
+			if $window.localStorage.getItem("token").length > 0
+				console.log "Token definition found"
+		catch e
+			$window.localStorage.setItem "token",false
+		
 		$scope.authenticated = $window.localStorage.getItem 'token'
 		
 		$rootScope.$on "tokenEvent",()->
