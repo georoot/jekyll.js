@@ -97,6 +97,15 @@ angular.module('application', ['ngRoute', 'restangular']).config(function($route
     return $scope.authenticated = $window.localStorage.getItem('token');
   });
 }).controller('displayController', function($scope, $window, $rootScope, Restangular) {
+  var e;
+  try {
+    if ($window.localStorage.getItem("token").length > 0) {
+      console.log("Token definition found");
+    }
+  } catch (error) {
+    e = error;
+    $window.localStorage.setItem("token", false);
+  }
   $scope.authenticated = $window.localStorage.getItem('token');
   return $rootScope.$on("tokenEvent", function() {
     return $scope.authenticated = $window.localStorage.getItem('token');
