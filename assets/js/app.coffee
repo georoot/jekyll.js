@@ -119,12 +119,14 @@ angular.module 'application',['ngRoute','restangular']
 		$scope.url = $window.localStorage.getItem 'url'
 		$scope.token = $window.localStorage.getItem 'token'
 		$scope.username = utilsFactory.getUsername $window.localStorage.getItem 'url'
+		$scope.loading = '1'
 
 		Restangular
 			.setDefaultHeaders {'Authorization': 'Basic '+$scope.token}
 			.one '/repos/'+$scope.username+'/'+$scope.url+'/contents/_posts'
 			.get()
 			.then (response)->
+				$scope.loading = '0'
 				$scope.posts = response
 				
 
@@ -155,7 +157,7 @@ angular.module 'application',['ngRoute','restangular']
 
 
 
-	.controller 'editorController',($scope,$window,$route, $routeParams,utilsFactory,Restangular,$sce)->
+	.controller 'editorController',($scope,$window,$route, $routeParams,utilsFactory,Restangular,$sce,$location)->
 		$scope.utils = utilsFactory
 		$scope.url = $window.localStorage.getItem 'url'
 		$scope.token = $window.localStorage.getItem 'token'
@@ -210,6 +212,11 @@ angular.module 'application',['ngRoute','restangular']
 			$scope.postResource.put()
 			$scope.message = "Post published on blog"
 
+		$scope.deletePost = ()->
+			console.log "Removing the post"
+			$scope.postResource.message = "Delete : "+utilsFactory.getPostTitle $scope.fileName
+			$scope.postResource.remove()
+			$location.path "/"
 
 		
 		$scope.editorInit = ()->

@@ -1,18 +1,22 @@
 <div class="container" ng-controller="dashboardController">
-	<div class="row">
+	<div>
+		<center>
+			<i class="fa fa-github fa-5x" aria-hidden="true" id="preloader" ng-if="loading == '1'"></i>
+		</center>
+	</div>
+	<div class="row" ng-if="loading == '0'">
 		<div class="column column-50">
 			<h5>Published posts</h5>
 			<ul>
 				<li ng-repeat="post in posts.slice().reverse()"><a href="#/editor/{{utils.encode(post.name)}}"><p class="postTitle">{{utils.getPostTitle(post.name)}}</p></a></li>
 			</ul>
-			<!-- <i class="fa fa-github fa-5x" aria-hidden="true" id="preloader"></i> -->
 		</div>
-		<div class="column column-50">
+		<!-- <div class="column column-50">
 			
-			<!-- 			<h5>Drafts on this system</h5>
+						<h5>Drafts on this system</h5>
 			<ul>
 					<li><a href="">Why github is so awesome....</a></li>
-			</ul> -->
-		</div>
+			</ul>
+		</div> -->
 	</div>
 </div>
